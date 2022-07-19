@@ -3,5 +3,5 @@ name: hedera-json-rpc-relay
 description: Helm chart deployment of the hashgraph/hedera-json-rpc-relay
 type: application
 version: 0.1.1
-appVersion: "0.7.0"
+appVersion: 0.7.0
 home: https://github.com/hashgraph/hedera-json-rpc-relay
