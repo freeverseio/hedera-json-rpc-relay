@@ -410,7 +410,8 @@ app.useRpc('eth_getLogs', async (params: any) => {
     params?.toBlock || null,
     params?.address || null,
     params?.topics || null,
-    requestId
+    requestId,
+    params?.limitParams || undefined
   ));
 });
 

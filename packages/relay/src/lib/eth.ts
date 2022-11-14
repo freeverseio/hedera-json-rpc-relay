@@ -23,7 +23,7 @@ import { ContractId, Hbar, EthereumTransaction } from '@hashgraph/sdk';
 import { BigNumber } from '@hashgraph/sdk/lib/Transfer';
 import { Logger } from 'pino';
 import { Block, Transaction, Log } from './model';
-import { MirrorNodeClient, SDKClient } from './clients';
+import { ILimitOrderParams, MirrorNodeClient, SDKClient } from './clients';
 import { JsonRpcError, predefined } from './errors/JsonRpcError';
 import { SDKClientError } from './errors/SDKClientError';
 import { MirrorNodeClientError } from './errors/MirrorNodeClientError';
@@ -1282,7 +1282,7 @@ export class EthImpl implements Eth {
       });
   }
 
-  async getLogs(blockHash: string | null, fromBlock: string | null, toBlock: string | null, address: string | null, topics: any[] | null, requestId?: string): Promise<Log[]> {
+  async getLogs(blockHash: string | null, fromBlock: string | null, toBlock: string | null, address: string | null, topics: any[] | null, requestId?: string, limitParams?: ILimitOrderParams | undefined): Promise<Log[]> {
     const params: any = {};
     if (blockHash) {
       try {
@@ -1349,18 +1349,26 @@ export class EthImpl implements Eth {
 
     let result;
     if (address) {
-      result = await this.mirrorNodeClient.getContractResultsLogsByAddress(address, params, undefined, requestId);
+      result = await this.mirrorNodeClient.getContractResultsLogsByAddress(address, params, limitParams, requestId);
     }
     else {
-      result = await this.mirrorNodeClient.getContractResultsLogs(params, undefined, requestId);
+      result = await this.mirrorNodeClient.getContractResultsLogs(params, limitParams, requestId);
     }
 
     if (!result || !result.logs) {
       return [];
     }
 
+    let uproccesedLogs = result.logs;
+    if (result.links && result.links.next) {
+      let nextLink = result.links.next;
+      // while (nextLink) {
+
+      // }
+    }
+
     const logs: Log[] = [];
-    for(const log of result.logs) {
+    for(const log of uproccesedLogs) {
       logs.push(
         new Log({
           address: await this.getLogEvmAddress(log.address, requestId) || log.address,

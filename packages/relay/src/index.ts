@@ -21,7 +21,7 @@
 import { Block, Log, Receipt, Transaction } from './lib/model';
 import { JsonRpcError, predefined } from './lib/errors/JsonRpcError';
 import { MirrorNodeClientError } from './lib/errors/MirrorNodeClientError';
-
+import { ILimitOrderParams } from './lib/clients';
 export { JsonRpcError, predefined, MirrorNodeClientError };
 
 export { RelayImpl } from './lib/relay';
@@ -70,7 +70,7 @@ export interface Eth {
 
   chainId(requestId?: string): string;
 
-  getLogs(blockHash: string|null, fromBlock: string|null, toBlock: string|null, address: string|null, topics: any[]|null, requestId?: string): Promise<Log[]>;
+  getLogs(blockHash: string|null, fromBlock: string|null, toBlock: string|null, address: string|null, topics: any[]|null, requestId?: string, limitParams?: ILimitOrderParams | undefined): Promise<Log[]>;
 
   getStorageAt(address: string, slot: string, blockNumber: string|null, requestId?: string): Promise<string>;
 
