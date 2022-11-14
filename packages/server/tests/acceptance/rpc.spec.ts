@@ -262,6 +262,17 @@ describe('@api RPC Server Acceptance Tests', function () {
                     expect(logsWithTopic[i].topics[0]).to.be.equal(topic);
                 }
             });
+
+            it('should be able to return more than 2 logs with limit of 2 logs per request', async () => {
+                //for the purpose of the test, we are settings limit to 2, and fetching all. 
+                const blocksBehindLatest = Number(await relay.call('eth_blockNumber', [], requestId)) - 500;
+                const logs = await relay.call('eth_getLogs', [{
+                    'fromBlock': blocksBehindLatest,
+                    'toBlock': 'latest',
+                    'limitParams': { limit: 2, order: 'desc'}
+                }], requestId);
+                expect(logs.length).to.be.greaterThan(1);
+            })
         });
 
         describe('Block related RPC calls', () => {
