@@ -36,7 +36,6 @@ import logsContractJson from '../contracts/Logs.json';
 import { predefined } from '../../../relay/src/lib/errors/JsonRpcError';
 import { EthImpl } from '@hashgraph/json-rpc-relay/src/lib/eth';
 import constants from '@hashgraph/json-rpc-relay/src/lib/constants';
-import { resourceLimits } from 'worker_threads';
 
 describe('@api RPC Server Acceptance Tests', function () {
     this.timeout(240 * 1000); // 240 seconds
@@ -265,12 +264,12 @@ describe('@api RPC Server Acceptance Tests', function () {
 
             it('should be able to return more than 2 logs with limit of 2 logs per request', async () => {
                 //for the purpose of the test, we are settings limit to 2, and fetching all. 
-                const blocksBehindLatest = Number(await relay.call('eth_blockNumber', [], requestId)) - 500;
+                const blocksBehindLatest = Number(await relay.call('eth_blockNumber', [], requestId)) - 50;
                 const logs = await relay.call('eth_getLogs', [{
                     'fromBlock': blocksBehindLatest,
                     'toBlock': 'latest',
                     'limitParams': { limit: 2, order: 'desc'}
-                }], requestId);
+                }], requestId); 
                 expect(logs.length).to.be.greaterThan(2);
             })
         });
