@@ -271,7 +271,7 @@ describe('@api RPC Server Acceptance Tests', function () {
                     'toBlock': 'latest',
                     'limitParams': { limit: 2, order: 'desc'}
                 }], requestId);
-                expect(logs.length).to.be.greaterThan(1);
+                expect(logs.length).to.be.greaterThan(2);
             })
         });
 
