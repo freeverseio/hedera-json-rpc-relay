@@ -436,7 +436,7 @@ export class MirrorNodeClient {
             this.setQueryParam(queryParamObject, 'order', limitOrderParams.order);
         }else {
             this.setQueryParam(queryParamObject, 'limit', constants.MIRROR_NODE_QUERY_LIMIT);
-            this.setQueryParam(queryParamObject, 'order', constants.ORDER.DESC);
+            this.setQueryParam(queryParamObject, 'order', constants.ORDER.ASC);
         }
     }
 

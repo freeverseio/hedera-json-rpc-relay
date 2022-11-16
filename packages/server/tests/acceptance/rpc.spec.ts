@@ -245,6 +245,7 @@ describe('@api RPC Server Acceptance Tests', function () {
                 const logs = await relay.call('eth_getLogs', [{
                     'fromBlock': log0Block.blockNumber,
                     'toBlock': log4Block.blockNumber,
+                    'limitParams': { limit: 100, order: 'desc'}
                 }]);
                 expect(logs.length).to.be.greaterThan(0);
                 const topic = logs[0].topics[0];
@@ -252,7 +253,8 @@ describe('@api RPC Server Acceptance Tests', function () {
                 const logsWithTopic = await relay.call('eth_getLogs', [{
                     'fromBlock': log0Block.blockNumber,
                     'toBlock': log4Block.blockNumber,
-                    'topics': [logs[0].topics[0]]
+                    'topics': [topic],
+                    'limitParams': { limit: 100, order: 'desc'}
                 }], requestId);
                 expect(logsWithTopic.length).to.be.greaterThan(0);
 

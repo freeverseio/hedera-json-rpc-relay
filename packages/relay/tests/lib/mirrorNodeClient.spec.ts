@@ -447,7 +447,7 @@ describe('MirrorNodeClient', async function () {
 
   it('`getLatestContractResultsByAddress` by address with timestamp, limit 2', async () => {
     const address = '0x0000000000000000000000000000000000001f41';
-    mock.onGet(`contracts/${address}/results?timestamp=lte:987654.000123456&limit=2&order=desc`).reply(200, { results: [contractResult], links: { next: null } });
+    mock.onGet(`contracts/${address}/results?timestamp=lte:987654.000123456&limit=2&order=asc`).reply(200, { results: [contractResult], links: { next: null } });
 
     const result = await mirrorNodeInstance.getLatestContractResultsByAddress(address, "987654.000123456", 2);
     expect(result).to.exist;
@@ -509,7 +509,7 @@ describe('MirrorNodeClient', async function () {
   });
 
   it('`getContractResultsLogsByNextLink`', async () => {
-    const nextLink = `/api/v1/contracts/results/logs?limit=2&order=desc&timestamp=lte:1668432962.375200975&index=lt:0`
+    const nextLink = `/api/v1/contracts/results/logs?limit=2&order=asc&timestamp=lte:1668432962.375200975&index=lt:0`
     mock.onGet(`${nextLink}`).reply(200, { logs: [log] });
 
     const result = await mirrorNodeInstance.getContractResultsLogsByNextLink(nextLink);
