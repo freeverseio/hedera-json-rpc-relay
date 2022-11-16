@@ -508,6 +508,19 @@ describe('MirrorNodeClient', async function () {
     }
   });
 
+  it('`getContractResultsLogsByNextLink`', async () => {
+    const nextLink = `/api/v1/contracts/results/logs?limit=2&order=desc&timestamp=lte:1668432962.375200975&index=lt:0`
+    mock.onGet(`${nextLink}`).reply(200, { logs: [log] });
+
+    const result = await mirrorNodeInstance.getContractResultsLogsByNextLink(nextLink);
+    expect(result).to.exist;
+    expect(result.logs.length).to.gt(0);
+    const firstResult = result.logs[0];
+    expect(firstResult.address).equal(log.address);
+    expect(firstResult.contract_id).equal(log.contract_id);
+    expect(firstResult.index).equal(log.index);
+  });
+
   it('`getBlocks` by number', async () => {
     mock.onGet(`blocks?limit=1&order=desc`).reply(200, block);
 

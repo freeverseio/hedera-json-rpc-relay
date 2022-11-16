@@ -1359,16 +1359,21 @@ export class EthImpl implements Eth {
       return [];
     }
 
-    let uproccesedLogs = result.logs;
+    let unproccesedLogs = result.logs;
     if (result.links && result.links.next) {
       let nextLink = result.links.next;
-      // while (nextLink) {
-
-      // }
+      while (nextLink) {
+        let nextResult = await this.mirrorNodeClient.getContractResultsLogsByNextLink(nextLink, requestId);
+        if (!nextResult || !nextResult.logs) {
+          break;
+        }
+        unproccesedLogs = unproccesedLogs.concat(nextResult.logs);
+        nextLink = nextResult.links.next;
+      }
     }
 
     const logs: Log[] = [];
-    for(const log of uproccesedLogs) {
+    for(const log of unproccesedLogs) {
       logs.push(
         new Log({
           address: await this.getLogEvmAddress(log.address, requestId) || log.address,

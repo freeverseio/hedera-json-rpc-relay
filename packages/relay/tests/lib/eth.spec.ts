@@ -1534,9 +1534,17 @@ describe('Eth calls using MirrorNode', async function () {
     });
 
     it('should be able to return more than two logs with limit of two per request', async function () {
+      const unfilteredLogs = {
+        logs: [
+          {...defaultLogs.logs[0], address: "0x0000000000000000000000000000000002131951"},
+          {...defaultLogs.logs[1], address: "0x0000000000000000000000000000000002131952"},
+          {...defaultLogs.logs[2], address: "0x0000000000000000000000000000000002131953"},
+          {...defaultLogs.logs[3], address: "0x0000000000000000000000000000000002131954"}
+        ]
+      }
       const filteredLogs = {
         logs: [
-          defaultLogs.logs[0],
+          {...defaultLogs.logs[0], address: "0x0000000000000000000000000000000002131951"},
           {...defaultLogs.logs[1], address: "0x0000000000000000000000000000000002131952"}
         ],
         links: {next: '/api/v1/contracts/results/logs?limit=2&order=desc&timestamp=lte:1668432962.375200975&index=lt:0'}
@@ -1552,11 +1560,12 @@ describe('Eth calls using MirrorNode', async function () {
       mock.onGet("blocks?limit=1&order=desc").reply(200, { blocks: [defaultBlock] });
       
       mock.onGet(`contracts/results/logs?timestamp=gte:${defaultBlock.timestamp.from}&timestamp=lte:${defaultBlock.timestamp.to}&limit=2&order=desc`).replyOnce(200, filteredLogs)
-      .onGet('/api/v1/contracts/results/logs?limit=5&order=desc&timestamp=lte:1668432962.375200975&index=lt:0').replyOnce(200, filteredLogsNext);
+      .onGet('contracts/results/logs?limit=2&order=desc&timestamp=lte:1668432962.375200975&index=lt:0').replyOnce(200, filteredLogsNext);
 
-      filteredLogs.logs.forEach((log, index) => {
+      unfilteredLogs.logs.forEach((log , index) => {
         mock.onGet(`contracts/${log.address}`).reply(200, {...defaultContract, contract_id: `0.0.105${index}`});
       });
+
       const limitParams = {limit: 2, order: 'desc'};
       const result = await ethImpl.getLogs(null, null, null, null, null, undefined, limitParams);
       expect(result).to.exist;
@@ -1564,8 +1573,8 @@ describe('Eth calls using MirrorNode', async function () {
       expect(result.length).to.eq(4);
       expectLogData(result[0], filteredLogs.logs[0], defaultDetailedContractResults);
       expectLogData(result[1], filteredLogs.logs[1], defaultDetailedContractResults);
-      expectLogData(result[2], filteredLogs.logs[2], defaultDetailedContractResults2);
-      expectLogData(result[3], filteredLogs.logs[3], defaultDetailedContractResults3);
+      expectLogData(result[2], filteredLogsNext.logs[0], defaultDetailedContractResults2);
+      expectLogData(result[3], filteredLogsNext.logs[1], defaultDetailedContractResults3);
     });
 
     it('Should return evm address if contract has one', async function () {

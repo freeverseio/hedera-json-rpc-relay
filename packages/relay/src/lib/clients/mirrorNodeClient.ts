@@ -339,6 +339,17 @@ export class MirrorNodeClient {
             requestId);
     }
 
+    public async getContractResultsLogsByNextLink(
+        link: string,
+        requestId?: string
+    ) {
+        const nextLink = link.split('/api/v1/')[1];
+        return this.request(`${nextLink}`,
+        MirrorNodeClient.GET_CONTRACT_RESULT_LOGS_ENDPOINT,
+        [400, 404],
+        requestId);
+    }
+
     public async getLatestBlock(requestId?: string) {
         return this.getBlocks(undefined, undefined, this.getLimitOrderQueryParam(1, MirrorNodeClient.ORDER.DESC), requestId);
     }
