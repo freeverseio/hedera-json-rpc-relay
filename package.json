@@ -21,7 +21,9 @@
     },
     "scripts": {
         "acceptancetest": "ts-mocha packages/server/tests/acceptance/index.spec.ts --exit",
-        "acceptancetest:api": "ts-mocha packages/server/tests/acceptance/index.spec.ts  -g '@api' --exit",
+        "acceptancetest:api_batch1": "ts-mocha packages/server/tests/acceptance/index.spec.ts  -g '@api-batch-1' --exit",
+        "acceptancetest:api_batch2": "ts-mocha packages/server/tests/acceptance/index.spec.ts  -g '@api-batch-2' --exit",
+        "acceptancetest:api_batch3": "ts-mocha packages/server/tests/acceptance/index.spec.ts  -g '@api-batch-3' --exit",
         "acceptancetest:erc20": "ts-mocha packages/server/tests/acceptance/index.spec.ts  -g '@erc20' --exit",
         "acceptancetest:ratelimiter": "ts-mocha packages/server/tests/acceptance/index.spec.ts  -g '@ratelimiter' --exit",
         "acceptancetest:tokencreate": "ts-mocha packages/server/tests/acceptance/index.spec.ts  -g '@tokencreate' --exit",
@@ -46,7 +48,7 @@
         "check:node": "ts-node packages/server/tests/helpers/nodeCheck.ts"
     },
     "dependencies": {
-        "@hashgraph/hedera-local": "^2.1.3",
+        "@hashgraph/hedera-local": "^2.4.5",
         "@open-rpc/schema-utils-js": "^1.16.1",
         "@types/find-config": "^1.0.1",
         "keyv-file": "^0.2.0",

@@ -23,7 +23,7 @@ the [JSON RPC Specification](https://playground.open-rpc.org/?schemaUrl=https://
 
 You must have installed
 
-- [node (version 16)](https://nodejs.org/en/about/)
+- [node (version 18)](https://nodejs.org/en/about/)
 - [npm](https://www.npmjs.com/)
 - [pnpm](https://pnpm.io/)
 - [Docker](https://docs.docker.com/engine/reference/commandline/docker/)
@@ -53,6 +53,15 @@ npm install -g newman
 newman run packages/server/tests/postman.json --env-var baseUrl=http://localhost:7546
 ```
 
+To enable Postman test to run via helm deployment add
+
+````
+test:
+  enabled: true
+  schedule: '@daily' #How often to run the Postman test
+  baseUrl: "http://127.0.0.1:7546" # Relay URL to run the test against
+
+
 ### Acceptance Tests
 
 The relay has a suite of acceptance tests that may be run to confirm E2E operation of the relay in either a `hedera-local-node` or deployed env.
@@ -81,10 +90,12 @@ HBAR_RATE_LIMIT_TINYBAR = 6000000000
 HBAR_RATE_LIMIT_DURATION = 60000
 RATE_LIMIT_DISABLED = false
 DEV_MODE = false
+GAS_PRICE_TINY_BAR_BUFFER = 10000000000
 MIRROR_NODE_RETRIES = 3
 MIRROR_NODE_RETRY_DELAY = 500
-GAS_PRICE_TINY_BAR_BUFFER = 10000000000
-```
+MIRROR_NODE_LIMIT_PARAM = 100
+INPUT_SIZE_LIMIT = 1
+````
 
 Note: Read more about `DEV_MODE` [here](docs/dev-mode.md)
 The following table highlights some initial configuration values to consider
